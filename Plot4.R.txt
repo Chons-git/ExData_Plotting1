@@ -1,17 +1,16 @@
-install.packages("dplyr")
-library(dplyr)
-install.packages("hms")
-library(hms)
-data<-read.csv2("household_power_consumption.txt")
-data$Date<-as.Date(data$Date,"%d/%m/%Y")
-data$Time<-as.hms(data$Time)
-dt<-tbl_df(data)
-dt1<-filter(dt,Date=="2007-02-01"|Date=="2007-02-02")
-x<-with(dt1, ymd(Date) + hms(Time))
-par(mfcol=c(2,2),mai=c(0.7,0.7,0.3,0.1))
-plot(x,dt1$Global_active_power,type="l",ylab="Global Active Power (kilowatts)")
-plot(x,dt1$Sub_metering_1,type="l",ylab="Energy sub metering");lines(x,dt1$Sub_metering_2,col="red");lines(x,dt1$Sub_metering_3,col="blue");legend("topright",col=c("black","red","blue"),text.width=NULL,text.font=NULL,legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),lty=1,seg.len=0.5)
-plot(x,dt1$Voltage,type="l",xlab="Datetime",ylab="Voltage")
-plot(x,dt1$Global_reactive_power,type="l",xlab="Datetime",ylab="Global reactive power")
+x<-readRDS("summarySCC_PM25.rds")
+y<- readRDS("Source_Classification_Code.rds")
+v<-tbl_df(x)
+v1<-filter(v,type=="NONPOINT")
+v2<-mutate(v1,SCC_2=substr(SCC,1,7))
+v3<-filter(v2,SCC_2=="2102001"|SCC_2=="2102002"|SCC_2=="2103001"|SCC_2=="2103002"|SCC_2=="2104001"|SCC_2=="2104002")
+boxplot(Emissions~year,v3,outline=FALSE,ylab="Coal emissions",xlab="Year",main="State of coal emissions in the US")
+
 dev.copy(png,file="Plot4.png")
 dev.off()
+
+
+
+## Coal related emissions taken in line with the classification explained in the following text: https://ofmpub.epa.gov/sccwebservices/sccsearch/docs/SCC-IntroToSCCs.pdf
+
+##The boxplot shows that the level of coal emissions from PM2.5 during 1999-2008 decreased in the US.

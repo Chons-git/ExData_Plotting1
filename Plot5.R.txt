@@ -1,0 +1,9 @@
+x<-readRDS("summarySCC_PM25.rds")
+y<- readRDS("Source_Classification_Code.rds")
+d<- x[which(x$fips =="24510",x$type=="ON-ROAD"),names(x) %in% c("Emissions","year")]
+d$year<-as.factor(d$year)
+ggplot(data=d,aes(x=year,y=log10(Emissions),ylab="Emissions"))+geom_boxplot()+xlab("Year")+ggtitle("Vehicle emissions in Baltimore")
+
+##The boxplot shows that the total vehicle emissions from PM2.5 (represented by emissions of type: ON-ROAD) in Baltimore decreased in 2008 in comparison to 1999.
+dev.copy(png,file="Plot5.png")
+dev.off()
