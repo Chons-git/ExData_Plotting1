@@ -1,6 +1,0 @@
-x<-readRDS("summarySCC_PM25.rds")
-y<- readRDS("Source_Classification_Code.rds")
-boxplot(Emissions~year,x,outline=FALSE,ylab="Emissions",xlab="Year",main="State of emissions in the US")
-##The boxplot shows that the total emissions from PM2.5 in the United States decreased from 1999 to 2008
-dev.copy(png,file="Plot1.png")
-dev.off()

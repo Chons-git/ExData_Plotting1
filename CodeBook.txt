@@ -1,0 +1,44 @@
+## Q1:
+
+t1<-read.csv2("UCI HAR Dataset_test_subject_test.txt",header=FALSE)
+t2<-read.csv("UCI HAR Dataset_test_X_test.txt",header=FALSE,sep="")
+t3<-read.csv2("UCI HAR Dataset_test_y_test.txt",header=FALSE)
+testd<-cbind(t1,t2,t3)
+
+tr1<-read.csv2("UCI HAR Dataset_train_subject_train.txt", header=FALSE)
+tr2<-read.csv2("UCI HAR Dataset_train_X_train.txt",header=FALSE,sep="")
+tr3<-read.csv2("UCI HAR Dataset_train_y_train.txt",header=FALSE)
+traind<-cbind(tr1,tr2,tr3)
+
+data<-rbind(testd,traind)
+summary(data)
+tdata<-t(data)
+
+## Q3,Q4:
+
+t4<-read.csv2("UCI HAR Dataset_features.txt",header=FALSE,sep="")
+t5<-cbind(t4,tdata)
+t5$V1<-NULL
+t6<-t(t5)
+colnames(t6) <- t6[1,]
+t7<-t6[-1,]
+
+## Q2:
+
+install.packages("dplyr")
+library(dplyr)
+install.packages("tidyverse")
+library(tidyverse)
+t8 <- as_tibble(t7)
+t9<-select(t8,contains(c("mean","std")))
+
+## Q5:
+
+by_s_a <- t8 %>% group_by(subject, activity)
+head(by_s_a)
+t11<-summarize(by_s_a,mean(c(2:562)))
+
+
+write.table(data,file = "nonamedata.txt",row.name=FALSE)
+write.table(t7,file = "tidydata.txt",row.name=FALSE)
+write.table(t11,file = "groupaveragesdata.txt",row.name=FALSE)
